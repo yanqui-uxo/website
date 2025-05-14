@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="src/mimic/mimic.ts" type="module"></script>
+  </head>
+  <body>
+    <template x-data x-for="row in $store.chests">
+      <template x-for="chest in row">
+        <div x-data="{open: false}">
+          <div x-show="!open">
+            <p x-text="`Color: ${chest.color}`"></p>
+            <button @click="open = true">Open</button>
+          </div>
+          <p
+            x-show="open"
+            x-text="`Color: ${chest.color}, Mimic: ${chest.mimic}`"
+          ></p>
+        </div>
+      </template>
+    </template>
+  </body>
+</html>
