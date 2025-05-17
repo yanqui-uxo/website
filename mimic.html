@@ -4,22 +4,30 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <link rel="stylesheet" href="src/mimic/styles.css" />
     <script src="src/mimic/mimic.ts" type="module"></script>
   </head>
   <body>
-    <template x-data x-for="row in $store.chests">
-      <template x-for="chest in row">
-        <div x-data="{open: false}">
-          <div x-show="!open">
-            <p x-text="`Color: ${chest.color}`"></p>
-            <button @click="open = true">Open</button>
-          </div>
-          <p
-            x-show="open"
-            x-text="`Color: ${chest.color}, Mimic: ${chest.mimic}`"
-          ></p>
+    <p>Regular chests tell the truth, Mimics lie</p>
+    <div
+      x-data
+      class="grid"
+      :style="`grid-template: repeat(${$store.height}, 200px) / repeat(${$store.width}, 200px)`"
+    >
+      <template x-for="chest in $store.chests.flat()">
+        <div
+          class="border flex flex-col justify-center content-center text-center"
+          :class="`bg-${chest.color}-300`"
+          x-data="{open: false}"
+        >
+          <p x-text="`Color: ${chest.color}`"></p>
+          <p x-text="chest.statement"></p>
+          <button class="border rounded" x-show="!open" @click="open = true">
+            Open
+          </button>
+          <p x-show="open" x-text="chest.isMimic ? 'ded :3' : 'Safe!'"></p>
         </div>
       </template>
-    </template>
+    </div>
   </body>
 </html>

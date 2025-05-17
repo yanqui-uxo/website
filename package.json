@@ -11,10 +11,12 @@
   "devDependencies": {
     "@types/alpinejs": "^3.13.11",
     "@types/lodash": "^4.17.16",
+    "tailwindcss": "^4.1.6",
     "typescript": "~5.8.3",
     "vite": "^6.3.5"
   },
   "dependencies": {
+    "@tailwindcss/vite": "^4.1.6",
     "alpinejs": "^3.14.9",
     "lodash": "^4.17.21"
   }
