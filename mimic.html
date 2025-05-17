@@ -13,32 +13,32 @@
       x-data="{width: $store.width, height: $store.height, mimicCount: $store.mimicCount}"
     >
       <label for="width">Width</label>
-      <input
-        type="number"
-        name="width"
-        id="width"
-        class="border"
-        x-model="width"
-      />
+      <input type="number" id="width" min="1" class="border" x-model="width" />
       <label for="height">Height</label>
       <input
         type="number"
-        name="height"
         id="height"
         class="border"
+        min="1"
         x-model="height"
       />
       <label for="mimiccount">Mimics</label>
       <input
         type="number"
-        name="mimiccount"
         id="mimiccount"
         class="border"
+        min="0"
+        :max="width * height"
         x-model="mimicCount"
       />
       <button
         class="border rounded"
-        @click="() => $store.generate(width, height, mimicCount)"
+        @click="() => {
+          const newMimicCount = Math.min(mimicCount, width * height);
+          mimicCount = newMimicCount;
+          $store.generate(width, height, newMimicCount);
+          $dispatch('regenerate');
+        }"
       >
         Regenerate
       </button>
@@ -53,6 +53,7 @@
           class="border flex flex-col justify-center content-center text-center"
           :class="`bg-${chest.color}-300`"
           x-data="{open: false}"
+          @regenerate.window="open = false"
         >
           <p x-text="`Color: ${chest.color}`"></p>
           <p x-text="chest.statement"></p>
