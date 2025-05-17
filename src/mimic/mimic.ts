@@ -14,10 +14,15 @@ import _ from "lodash";
 
 const width = 3;
 const height = 3;
+const mimicCount = 2;
 
-function generateChests(width: number, height: number): Chest[][] {
+function generateChests(
+  width: number,
+  height: number,
+  mimicCount: number
+): Chest[][] {
   let chests: Chest[][] = [];
-  let mimicIndices = _.sampleSize(_.range(0, width * height), 2);
+  let mimicIndices = _.sampleSize(_.range(0, width * height), mimicCount);
 
   let index = 0;
   for (let y = 0; y < height; y++) {
@@ -50,7 +55,7 @@ function assignStatements(
   }
 }
 
-const chests = generateChests(width, height);
+const chests = generateChests(width, height, mimicCount);
 assignStatements(chests, [
   ...colors.map(colorStatement),
   ..._.range(0, height).map(rowStatement),
@@ -62,4 +67,5 @@ assignStatements(chests, [
 Alpine.store("chests", chests);
 Alpine.store("width", width);
 Alpine.store("height", height);
+Alpine.store("mimicCount", mimicCount);
 Alpine.start();
