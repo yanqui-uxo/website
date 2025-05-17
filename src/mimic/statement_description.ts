@@ -72,7 +72,7 @@ export function relativePositionStatement(
           ?.isMimic ?? null
       );
     },
-    true: `The chest ${relativePosition} this chest is a Mimic.`,
-    false: `The chest ${relativePosition} this chest is not a Mimic.`,
+    true: `The chest ${relativePosition} this chest is a Mimic`,
+    false: `The chest ${relativePosition} this chest is not a Mimic`,
   };
 }

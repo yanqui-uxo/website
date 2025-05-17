@@ -55,17 +55,22 @@ function assignStatements(
   }
 }
 
-const chests = generateChests(width, height, mimicCount);
-assignStatements(chests, [
-  ...colors.map(colorStatement),
-  ..._.range(0, height).map(rowStatement),
-  ..._.range(0, width).map(columnStatement),
-  // lord forgive me
-  ...(Object.keys(relativePositions) as any).map(relativePositionStatement),
-]);
+function generate(width: number, height: number, mimicCount: number) {
+  const chests = generateChests(width, height, mimicCount);
+  assignStatements(chests, [
+    ...colors.map(colorStatement),
+    ..._.range(0, height).map(rowStatement),
+    ..._.range(0, width).map(columnStatement),
+    // lord forgive me
+    ...(Object.keys(relativePositions) as any).map(relativePositionStatement),
+  ]);
+  Alpine.store("chests", chests);
+  Alpine.store("width", width);
+  Alpine.store("height", height);
+  Alpine.store("mimicCount", mimicCount);
+}
 
-Alpine.store("chests", chests);
-Alpine.store("width", width);
-Alpine.store("height", height);
-Alpine.store("mimicCount", mimicCount);
+generate(3, 3, 2);
+
+Alpine.store("generate", generate);
 Alpine.start();
