@@ -13,7 +13,8 @@
 		"lint": "prettier --check . && eslint .",
 		"format": "prettier --write .",
 		"test:unit": "vitest",
-		"test": "npm run test:unit -- --run"
+		"test": "npm run test:unit -- --run",
+		"deploy": "npm run build && gh-pages --nojekyll -d build"
 	},
 	"devDependencies": {
 		"@eslint/js": "^10.0.1",
@@ -24,10 +25,12 @@
 		"@types/node": "^24.13.1",
 		"@vitest/browser-playwright": "^4.1.8",
 		"cheerio": "^1.2.0",
+		"daisyui": "^5.5.23",
 		"domhandler": "^6.0.1",
 		"eslint": "^10.4.1",
 		"eslint-config-prettier": "^10.1.8",
 		"eslint-plugin-svelte": "^3.19.0",
+		"gh-pages": "^6.3.0",
 		"globals": "^17.6.0",
 		"playwright": "^1.60.0",
 		"pokemon-tcg-pocket-database": "^2.7.0",
