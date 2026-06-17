@@ -32,18 +32,24 @@
 
 {#each matchingDecks as deck (deck)}
 	<h1 class="text-2xl">{deck.name} ({deck.set})</h1>
-	<div class="flex">
-		{#each deck.cards as card (card.id)}
-			<div class="relative">
-				<img
-					src={showImages
-						? `https://raw.githubusercontent.com/chase-mew/pokemon-tcg-pocket-cards/refs/heads/main/images/cards/${card.id}.png`
-						: undefined}
-					class="w-24 aspect-367/512"
-					alt={`${idsToNames[card.id]} (${card.id})`}
-				/>
-				<p class="absolute z-10 bottom-0 right-0 bg-black">{card.count}</p>
-			</div>
-		{/each}
-	</div>
+	{#if showImages}
+		<div class="flex">
+			{#each deck.cards as card (card.id)}
+				<div class="relative">
+					<img
+						src={`https://raw.githubusercontent.com/chase-mew/pokemon-tcg-pocket-cards/refs/heads/main/images/cards/${card.id}.png`}
+						class="w-24 h-auto"
+						alt={card.id}
+					/>
+					<p class="absolute z-10 bottom-0 right-0 bg-black">{card.count}</p>
+				</div>
+			{/each}
+		</div>
+	{:else}
+		<ul class="list-disc">
+			{#each deck.cards as card (card.id)}
+				<li>{idsToNames[card.id]} x{card.count}</li>
+			{/each}
+		</ul>
+	{/if}
 {/each}
