@@ -46,9 +46,9 @@
 			{/each}
 		</div>
 	{:else}
-		<ul class="list-disc">
+		<ul class="list-disc list-inside">
 			{#each deck.cards as card (card.id)}
-				<li>{idsToNames[card.id]} x{card.count}</li>
+				<li>{idsToNames[card.id]} ({card.id}) x{card.count}</li>
 			{/each}
 		</ul>
 	{/if}
