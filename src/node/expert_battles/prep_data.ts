@@ -2,6 +2,7 @@ import * as cheerio from 'cheerio';
 import type { Element } from 'domhandler';
 import { readFileSync, writeFileSync } from 'node:fs';
 import { Cards, type Deck, type DeckCard } from '../../lib/expert_battles/deck_types.ts';
+import fixedDecks from './fixed_decks.json' with { type: 'json' };
 import unknownDecksJson from './unknown_decks.json' with { type: 'json' };
 
 // HTML taken from https://game8.co/games/Pokemon-TCG-Pocket/archives/483771
@@ -67,6 +68,14 @@ const htmlDecks = $('table:contains("All Solo Battles")')
 
 		const [name, set] = [match[1], match[2]];
 
+		const fixedDeck = fixedDecks.find((deck) => deck.name === name && deck.set === set);
+		if (fixedDeck) {
+			for (const { id } of fixedDeck.cards) {
+				cardIds.add(id);
+			}
+			return fixedDeck;
+		}
+
 		const table = $(el).nextAll('table:contains("Deck")').first();
 		return {
 			name,
@@ -78,10 +87,7 @@ const htmlDecks = $('table:contains("All Solo Battles")')
 
 writeFileSync(
 	'../../lib/assets/expert_battles/decks.json',
-	JSON.stringify(htmlDecks.concat(unknownDecks)),
-	{
-		flag: 'w'
-	}
+	JSON.stringify(htmlDecks.concat(unknownDecks))
 );
 
 const cardsJsonResponse = await fetch(
@@ -89,4 +95,4 @@ const cardsJsonResponse = await fetch(
 );
 const cardsJson = await cardsJsonResponse.json();
 const cards = Cards.parse(cardsJson).filter((c) => cardIds.has(c.id));
-writeFileSync('../../lib/assets/expert_battles/cards.json', JSON.stringify(cards), { flag: 'w' });
+writeFileSync('../../lib/assets/expert_battles/cards.json', JSON.stringify(cards));

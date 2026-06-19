@@ -1,0 +1,20 @@
+[
+	{
+		"name": "Mega Manectric ex & Jolteon ex",
+		"set": "Mega Shine",
+		"cards": [
+			{ "id": "b1-184", "count": 2 },
+			{ "id": "b1-081", "count": 2 },
+			{ "id": "b2b-026", "count": 2 },
+			{ "id": "b2b-027", "count": 2 },
+			{ "id": "a3a-021", "count": 2 },
+			{ "id": "pa-002", "count": 1 },
+			{ "id": "pa-005", "count": 2 },
+			{ "id": "a4-151", "count": 2 },
+			{ "id": "pa-007", "count": 2 },
+			{ "id": "a2-150", "count": 1 },
+			{ "id": "b1-225", "count": 1 },
+			{ "id": "b2b-069", "count": 1 }
+		]
+	}
+]
