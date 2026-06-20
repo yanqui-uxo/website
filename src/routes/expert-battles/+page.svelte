@@ -39,7 +39,7 @@
 					<img
 						src={`https://raw.githubusercontent.com/chase-mew/pokemon-tcg-pocket-cards/refs/heads/main/images/cards/${card.id}.png`}
 						class="w-24 h-auto"
-						alt={card.id}
+						alt={`${idsToNames[card.id]} (${card.id})`}
 					/>
 					<p class="text-2xl absolute z-10 bottom-0 right-0 bg-black rounded-full">{card.count}</p>
 				</div>
