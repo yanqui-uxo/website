@@ -48,15 +48,17 @@
 >
 
 {#each matchingDecks as deck (deck)}
+	<br />
+
 	<h1 class="text-2xl">{deck.name} ({deck.set})</h1>
 	{#if showImages}
-		<div class="flex">
+		<div class="flex flex-wrap gap-1">
 			{#each deck.cards as card (card.id)}
 				<div class="relative">
 					<img
 						src={idsToImages[card.id]}
-						class="w-24 h-auto"
 						alt={`${idsToNames[card.id]} (${card.id})`}
+						class="w-24 h-auto"
 					/>
 					<p class="text-2xl absolute z-10 bottom-0 right-0 bg-black rounded-sm">{card.count}</p>
 				</div>
