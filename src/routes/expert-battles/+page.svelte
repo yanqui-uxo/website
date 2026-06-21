@@ -35,6 +35,10 @@
 	let showImages = $state(false);
 </script>
 
+<svelte:head>
+	<title>Expert Battles</title>
+</svelte:head>
+
 <p>Search for cards, use commas between the cards to search for multiple</p>
 <input class="input" bind:value={search} />
 
