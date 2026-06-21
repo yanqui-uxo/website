@@ -14,7 +14,7 @@
 		"format": "prettier --write .",
 		"test:unit": "vitest",
 		"test": "npm run test:unit -- --run",
-		"deploy": "npm run build && gh-pages --nojekyll -d build"
+		"deploy": "npm run build && gh-pages --cname yanqui.dev --nojekyll -d build"
 	},
 	"devDependencies": {
 		"@eslint/js": "^10.0.1",
