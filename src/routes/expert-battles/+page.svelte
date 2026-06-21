@@ -1,6 +1,17 @@
-<script>
+<script lang="ts">
 	import cards from '$lib/assets/expert_battles/cards.json';
 	import decks from '$lib/assets/expert_battles/decks.json';
+
+	const imports = import.meta.glob<string>('$lib/assets/expert_battles/images/*.avif', {
+		eager: true,
+		import: 'default'
+	});
+	const idsToImages = Object.fromEntries(
+		Object.entries(imports).map(([origPath, path]) => [
+			origPath.replace(/.+\/(.+)\.avif/, '$1'),
+			path
+		])
+	);
 
 	const idsToNames = Object.fromEntries(cards.map((card) => [card.id, card.name]));
 
@@ -28,7 +39,9 @@
 <input class="input" bind:value={search} />
 
 <input type="checkbox" id="showimages" class="checkbox" bind:checked={showImages} />
-<label for="showimages">Show images (WARNING: uses a lot of data)</label>
+<label for="showimages"
+	>Show images (WARNING: may be slow on less powerful devices/connections)</label
+>
 
 {#each matchingDecks as deck (deck)}
 	<h1 class="text-2xl">{deck.name} ({deck.set})</h1>
@@ -37,7 +50,7 @@
 			{#each deck.cards as card (card.id)}
 				<div class="relative">
 					<img
-						src={`https://raw.githubusercontent.com/chase-mew/pokemon-tcg-pocket-cards/refs/heads/main/images/cards/${card.id}.png`}
+						src={idsToImages[card.id]}
 						class="w-24 h-auto"
 						alt={`${idsToNames[card.id]} (${card.id})`}
 					/>
