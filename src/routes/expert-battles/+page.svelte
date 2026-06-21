@@ -54,7 +54,7 @@
 						class="w-24 h-auto"
 						alt={`${idsToNames[card.id]} (${card.id})`}
 					/>
-					<p class="text-2xl absolute z-10 bottom-0 right-0 bg-black rounded-full">{card.count}</p>
+					<p class="text-2xl absolute z-10 bottom-0 right-0 bg-black rounded-sm">{card.count}</p>
 				</div>
 			{/each}
 		</div>
