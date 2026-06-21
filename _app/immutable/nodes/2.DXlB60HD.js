@@ -1,0 +1,1 @@
+import{L as e,R as t,T as n,g as r,l as i,v as a}from"../chunks/CGAP87tc.js";import{s as o}from"../chunks/B21QcBr6.js";import"../chunks/xihTtKlq.js";var s=a(`<a>Expert Battle decks</a>`);function c(a,c){t(c,!0);var l=s();n(e=>i(l,`href`,e),[()=>o(`/expert-battles`)]),r(a,l),e()}export{c as component};
