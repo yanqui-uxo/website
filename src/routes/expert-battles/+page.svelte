@@ -1,6 +1,7 @@
 <script lang="ts">
 	import cards from '$lib/assets/expert_battles/cards.json';
 	import decks from '$lib/assets/expert_battles/decks.json';
+	import { PersistedState } from 'runed';
 
 	const imports = import.meta.glob<string>('$lib/assets/expert_battles/images/*.avif', {
 		eager: true,
@@ -32,7 +33,7 @@
 		})
 	);
 
-	let showImages = $state(false);
+	let showImages = new PersistedState('showImages', false);
 </script>
 
 <svelte:head>
@@ -42,7 +43,7 @@
 <p>Search for cards, use commas between the cards to search for multiple</p>
 <input class="input" bind:value={search} />
 
-<input type="checkbox" id="showimages" class="checkbox" bind:checked={showImages} />
+<input type="checkbox" id="showimages" class="checkbox" bind:checked={showImages.current} />
 <label for="showimages"
 	>Show images (WARNING: may be slow on less powerful devices/connections)</label
 >
@@ -51,7 +52,7 @@
 	<br />
 
 	<h1 class="text-2xl">{deck.name} ({deck.set})</h1>
-	{#if showImages}
+	{#if showImages.current}
 		<div class="flex flex-wrap gap-1">
 			{#each deck.cards as card (card.id)}
 				<div class="relative">
