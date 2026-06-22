@@ -1,1 +1,0 @@
-import{B as e,V as t,f as n,g as r,k as i,v as a}from"../chunks/CGAP87tc.js";import"../chunks/xihTtKlq.js";var o=t({prerender:()=>!0}),s=a(`<div class="m-2"><!></div>`);function c(t,a){var o=s();n(i(o),()=>a.children),e(o),r(t,o)}export{c as component,o as universal};
