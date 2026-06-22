@@ -60,9 +60,6 @@ importers:
       playwright:
         specifier: ^1.60.0
         version: 1.60.0
-      pokemon-tcg-pocket-database:
-        specifier: ^2.7.0
-        version: 2.7.0
       prettier:
         specifier: ^3.8.3
         version: 3.8.4
@@ -1400,9 +1397,6 @@ packages:
   pngjs@7.0.0:
     resolution: {integrity: sha512-LKWqWJRhstyYo9pGvgor/ivk2w94eSjE3RGVuzLGlr3NmD8bf7RcYGze1mNdEHRP6TRP6rMuDHk5t44hnTRyow==}
     engines: {node: '>=14.19.0'}
-
-  pokemon-tcg-pocket-database@2.7.0:
-    resolution: {integrity: sha512-KBdU95f99Qods5i0162N5fwWJCJhbqClEvwSqi2AR+Q5mHbKxpQhH1b3T96LURaziXs1QJ+2txGSyLDzJ5ZScg==}
 
   postcss-load-config@3.1.4:
     resolution: {integrity: sha512-6DiM4E7v4coTE4uzA8U//WhtPwyhiim3eyjEMFCnUpzbrkK9wJHgKDT2mR+HbtSrd/NubVaYTOpSpjUl8NQeRg==}
@@ -3026,8 +3020,6 @@ snapshots:
       fsevents: 2.3.2
 
   pngjs@7.0.0: {}
-
-  pokemon-tcg-pocket-database@2.7.0: {}
 
   postcss-load-config@3.1.4(postcss@8.5.15):
     dependencies:
