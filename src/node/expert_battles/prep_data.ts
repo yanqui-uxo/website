@@ -2,6 +2,7 @@ import * as cheerio from 'cheerio';
 import type { Element } from 'domhandler';
 import { readFileSync, writeFileSync } from 'node:fs';
 import { Cards, type Deck, type DeckCard } from '../../lib/expert_battles/deck_types.ts';
+import { branch } from './config.ts';
 import fixedDecks from './fixed_decks.json' with { type: 'json' };
 import unknownDecksJson from './unknown_decks.json' with { type: 'json' };
 
@@ -91,7 +92,7 @@ writeFileSync(
 );
 
 const cardsJsonResponse = await fetch(
-	'https://raw.githubusercontent.com/chase-mew/pokemon-tcg-pocket-cards/refs/heads/main/v4.json'
+	`https://raw.githubusercontent.com/chase-mew/pokemon-tcg-pocket-cards/refs/heads/${branch}/v4.json`
 );
 const cardsJson = await cardsJsonResponse.json();
 const cards = Cards.parse(cardsJson).filter((c) => cardIds.has(c.id));
