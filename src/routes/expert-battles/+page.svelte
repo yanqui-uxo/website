@@ -1,18 +1,30 @@
 <script lang="ts">
 	import cards from '$lib/assets/expert_battles/cards.json';
 	import decks from '$lib/assets/expert_battles/decks.json';
+	import type { Picture } from '@sveltejs/enhanced-img';
 	import { PersistedState } from 'runed';
 
-	const imports = import.meta.glob<string>('$lib/assets/expert_battles/images/*.avif', {
+	const imports = import.meta.glob<Picture>('$lib/assets/expert_battles/images/*.avif', {
 		eager: true,
-		import: 'default'
+		import: 'default',
+		query: {
+			enhanced: true
+		}
 	});
-	const idsToImages = Object.fromEntries(
-		Object.entries(imports).map(([origPath, path]) => [
+
+	const idsToPictures = Object.fromEntries(
+		Object.entries(imports).map(([origPath, picture]) => [
 			origPath.replace(/.+\/(.+)\.avif/, '$1'),
-			path
+			picture
 		])
 	);
+	function getPicture(id: string): Picture {
+		const picture = idsToPictures[id];
+		if (!picture) {
+			throw new Error(`ID ${id} does not have associated picture`);
+		}
+		return picture;
+	}
 
 	const idsToNames = Object.fromEntries(cards.map((card) => [card.id, card.name]));
 
@@ -56,8 +68,8 @@
 		<div class="flex flex-wrap gap-1">
 			{#each deck.cards as card (card.id)}
 				<div class="relative">
-					<img
-						src={idsToImages[card.id]}
+					<enhanced:img
+						src={getPicture(card.id)}
 						alt={`${idsToNames[card.id]} (${card.id})`}
 						class="w-24 h-auto"
 					/>
