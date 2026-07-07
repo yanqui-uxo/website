@@ -1,7 +1,7 @@
 import * as cheerio from 'cheerio';
 import type { Element } from 'domhandler';
 import { readFileSync, writeFileSync } from 'node:fs';
-import { Cards, type Deck, type DeckCard } from '../../lib/expert_battles/deck_types.ts';
+import * as z from 'zod';
 import { branch } from './config.ts';
 import fixedDecks from './fixed_decks.json' with { type: 'json' };
 import unknownDecksJson from './unknown_decks.json' with { type: 'json' };
@@ -14,18 +14,18 @@ const $ = cheerio.load(html);
 const cardIds: Set<string> = new Set<string>();
 
 for (const deck of unknownDecksJson) {
-	for (const card of deck) {
+	for (const card of deck.cards) {
 		cardIds.add(card.id);
 	}
 }
-const unknownDecks: Deck[] = unknownDecksJson.map((deck) => ({
-	name: 'Unknown',
+const unknownDecks = unknownDecksJson.map((deck) => ({
+	name: deck.name,
 	set: 'N/A',
-	cards: deck
+	cards: deck.cards
 }));
 
 const imgAltRegex = /([\w-]+) (\d+)/;
-function deckListTableToCards(table: cheerio.Cheerio<Element>): DeckCard[] {
+function deckListTableToCards(table: cheerio.Cheerio<Element>) {
 	return table
 		.find('td')
 		.map((_, el) => {
@@ -95,5 +95,7 @@ const cardsJsonResponse = await fetch(
 	`https://raw.githubusercontent.com/chase-mew/pokemon-tcg-pocket-cards/refs/heads/${branch}/v4.json`
 );
 const cardsJson = await cardsJsonResponse.json();
+
+const Cards = z.array(z.object({ id: z.string(), name: z.string() }));
 const cards = Cards.parse(cardsJson).filter((c) => cardIds.has(c.id));
 writeFileSync('../../lib/assets/expert_battles/cards.json', JSON.stringify(cards));
