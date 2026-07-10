@@ -15,6 +15,17 @@
 
 	const idsToNames = Object.fromEntries(cards.map((card) => [card.id, card.name]));
 
+	function idToLink(id: string) {
+		const match = id.match(/(\w+)-(\d+)/);
+		if (!match?.[1] || !match?.[2]) {
+			throw new Error(`Regex failed on ID ${id}`);
+		}
+
+		const [set, number] = [match[1], parseInt(match[2])];
+		const linkSet = set.replace(/^p([a-z])$/, 'p-$1');
+		return `https://pocket.limitlesstcg.com/cards/${linkSet}/${number}`;
+	}
+
 	let search = $state('');
 	let searchTerms = $derived(search.split(',').map((search) => search.trim()));
 	let matchingCardArrays = $derived(
@@ -49,15 +60,13 @@
 				{#each deck.cards as card (card.id)}
 					<figure class="flex flex-col justify-end gap-1 w-24">
 						<figcaption class="text-xs text-center">
-							{idsToNames[card.id]} <br /> ({card.id})
+							<a href={idToLink(card.id)} rel="external" class="link"
+								>{idsToNames[card.id]} <br /> ({card.id})</a
+							>
 						</figcaption>
 						<div class="relative">
-							<img
-								src={idsToImagePaths[card.id]}
-								alt={`${idsToNames[card.id]} (${card.id})`}
-								loading="lazy"
-							/>
-							<p class="right-0 bottom-0 z-10 absolute bg-black rounded-sm text-2xl">
+							<img src={idsToImagePaths[card.id]} alt={`${idsToNames[card.id]} (${card.id})`} />
+							<p class="right-0 bottom-0 z-10 absolute bg-black rounded-sm text-white text-2xl">
 								{card.count}
 							</p>
 						</div>
