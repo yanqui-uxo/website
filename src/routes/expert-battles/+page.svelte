@@ -65,7 +65,11 @@
 							>
 						</figcaption>
 						<div class="relative">
-							<img src={idsToImagePaths[card.id]} alt={`${idsToNames[card.id]} (${card.id})`} />
+							<img
+								src={idsToImagePaths[card.id]}
+								alt={`${idsToNames[card.id]} (${card.id})`}
+								loading="lazy"
+							/>
 							<p class="right-0 bottom-0 z-10 absolute bg-black rounded-sm text-white text-2xl">
 								{card.count}
 							</p>
