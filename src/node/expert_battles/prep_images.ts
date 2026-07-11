@@ -3,7 +3,7 @@ import sharp from 'sharp';
 import cards from '../../lib/assets/expert_battles/cards.json' with { type: 'json' };
 import { branch } from './config.ts';
 
-const overwrite = true;
+const overwrite = false;
 
 for (const { id } of cards) {
 	const path = `../../lib/assets/expert_battles/images/${id}.avif`;

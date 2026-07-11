@@ -252,5 +252,22 @@
 			{ "id": "a3a-069", "count": 1 },
 			{ "id": "b1-225", "count": 1 }
 		]
+	},
+	{
+		"name": "Silvally & Rampardos",
+		"cards": [
+			{ "id": "a3a-060", "count": 2 },
+			{ "id": "a3a-061", "count": 2 },
+			{ "id": "a2-144", "count": 2 },
+			{ "id": "a2-088", "count": 1 },
+			{ "id": "a2-089", "count": 2 },
+			{ "id": "a3-144", "count": 2 },
+			{ "id": "pa-007", "count": 2 },
+			{ "id": "a1-225", "count": 1 },
+			{ "id": "a2-150", "count": 1 },
+			{ "id": "a2b-071", "count": 1 },
+			{ "id": "a3a-067", "count": 2 },
+			{ "id": "b1-225", "count": 2 }
+		]
 	}
 ]
