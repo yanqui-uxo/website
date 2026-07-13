@@ -3,15 +3,22 @@
 	import decks from '$lib/assets/expert_battles/decks.json';
 
 	const imports = import.meta.glob<string>('$lib/assets/expert_battles/images/*.avif', {
-		eager: true,
 		import: 'default'
 	});
-	const idsToImagePaths = Object.fromEntries(
+	const idsToImagePromises = Object.fromEntries(
 		Object.entries(imports).map(([origPath, path]) => [
 			origPath.replace(/.+\/(.+)\.avif/, '$1'),
 			path
 		])
 	);
+	async function getImagePath(id: string): Promise<string> {
+		const promise = idsToImagePromises[id];
+		if (!promise) {
+			throw new Error(`No image for ID ${id}`);
+		}
+
+		return promise();
+	}
 
 	const idsToNames = Object.fromEntries(cards.map((card) => [card.id, card.name]));
 
@@ -63,11 +70,11 @@
 							{idsToNames[card.id]} <br /> ({card.id})
 						</figcaption>
 						<div class="relative">
-							<img
-								src={idsToImagePaths[card.id]}
-								alt={`${idsToNames[card.id]} (${card.id})`}
-								loading="lazy"
-							/>
+							{#await getImagePath(card.id)}
+								<p>{idsToNames[card.id]} ({card.id})</p>
+							{:then path}
+								<img src={path} alt={`${idsToNames[card.id]} (${card.id})`} loading="lazy" />
+							{/await}
 							<p class="right-0 bottom-0 z-10 absolute bg-black rounded-sm text-white text-2xl">
 								{card.count}
 							</p>
