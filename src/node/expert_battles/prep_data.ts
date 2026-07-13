@@ -87,7 +87,7 @@ const htmlDecks = $('table:contains("All Solo Battles")')
 	.toArray();
 
 writeFileSync(
-	'../../lib/assets/expert_battles/decks.json',
+	'../../routes/expert-battes/decks.json',
 	JSON.stringify(htmlDecks.concat(unknownDecks))
 );
 
@@ -98,4 +98,4 @@ const cardsJson = await cardsJsonResponse.json();
 
 const Cards = z.array(z.object({ id: z.string(), name: z.string() }));
 const cards = Cards.parse(cardsJson).filter((c) => cardIds.has(c.id));
-writeFileSync('../../lib/assets/expert_battles/cards.json', JSON.stringify(cards));
+writeFileSync('../../routes/expert-battles/cards.json', JSON.stringify(cards));

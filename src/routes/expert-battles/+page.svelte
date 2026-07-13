@@ -1,8 +1,8 @@
 <script lang="ts">
-	import cards from '$lib/assets/expert_battles/cards.json';
-	import decks from '$lib/assets/expert_battles/decks.json';
+	import cards from './cards.json';
+	import decks from './decks.json';
 
-	const imports = import.meta.glob<string>('$lib/assets/expert_battles/images/*.avif', {
+	const imports = import.meta.glob<string>('./images/*.avif', {
 		import: 'default'
 	});
 	const idsToImagePromises = Object.fromEntries(
