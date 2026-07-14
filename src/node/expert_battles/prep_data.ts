@@ -85,17 +85,49 @@ const htmlDecks = $('table:contains("All Solo Battles")')
 		};
 	})
 	.toArray();
-
-writeFileSync(
-	'../../routes/expert-battes/decks.json',
-	JSON.stringify(htmlDecks.concat(unknownDecks))
-);
+const decks = htmlDecks.concat(unknownDecks);
 
 const cardsJsonResponse = await fetch(
 	`https://raw.githubusercontent.com/chase-mew/pokemon-tcg-pocket-cards/refs/heads/${branch}/v4.json`
 );
 const cardsJson = await cardsJsonResponse.json();
 
-const Cards = z.array(z.object({ id: z.string(), name: z.string() }));
+const Cards = z.array(
+	z.object({ id: z.string(), name: z.string(), rarity: z.string(), artist: z.string() })
+);
 const cards = Cards.parse(cardsJson).filter((c) => cardIds.has(c.id));
-writeFileSync('../../routes/expert-battles/cards.json', JSON.stringify(cards));
+
+const dupeExceptions = ['a4b-165'];
+const dupes = Object.fromEntries(
+	cards
+		.filter((card) => card.id.startsWith('a4b'))
+		.map((card) => [
+			card.id,
+			dupeExceptions.includes(card.id)
+				? undefined
+				: cards.find(
+						(otherCard) =>
+							!otherCard.id.startsWith('a4b') &&
+							card.name === otherCard.name &&
+							card.rarity === otherCard.rarity &&
+							card.artist === otherCard.artist
+					)
+		])
+);
+const dedupedCards = cards
+	.filter((card) => !dupes[card.id])
+	.map((card) => ({
+		id: card.id,
+		name: card.name
+	}));
+
+const dedupedDecks = decks.map((deck) => ({
+	...deck,
+	cards: deck.cards.map((card) => {
+		const dupe = dupes[card.id];
+		return dupe ? { id: dupe.id, count: card.count } : card;
+	})
+}));
+
+writeFileSync('../../routes/expert-battles/decks.json', JSON.stringify(dedupedDecks));
+writeFileSync('../../routes/expert-battles/cards.json', JSON.stringify(dedupedCards));

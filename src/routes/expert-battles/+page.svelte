@@ -1,28 +1,23 @@
 <script lang="ts">
+	import { SvelteSet } from 'svelte/reactivity';
+	import Card from './Card.svelte';
 	import cards from './cards.json';
-	import decks from './decks.json';
+	import decksJson from './decks.json';
 
-	const imports = import.meta.glob<string>('./images/*.avif', {
-		import: 'default'
+	type Card = (typeof cards)[number];
+
+	const decks = decksJson.map((deck) => {
+		const deckCards = deck.cards.map((deckCard) => {
+			const name = cards.find((card) => card.id === deckCard.id)?.name;
+			if (!name) {
+				throw new Error(`No card with ID ${deckCard.id} in cards.json`);
+			}
+			return { ...deckCard, name };
+		});
+		return { ...deck, cards: deckCards };
 	});
-	const idsToImagePromises = Object.fromEntries(
-		Object.entries(imports).map(([origPath, path]) => [
-			origPath.replace(/.+\/(.+)\.avif/, '$1'),
-			path
-		])
-	);
-	async function getImagePath(id: string): Promise<string> {
-		const promise = idsToImagePromises[id];
-		if (!promise) {
-			throw new Error(`No image for ID ${id}`);
-		}
 
-		return promise();
-	}
-
-	const idsToNames = Object.fromEntries(cards.map((card) => [card.id, card.name]));
-
-	function idToLink(id: string) {
+	function idToLink(id: string): string {
 		const match = id.match(/(\w+)-(\d+)/);
 		if (!match?.[1] || !match?.[2]) {
 			throw new Error(`Regex failed on ID ${id}`);
@@ -33,30 +28,76 @@
 		return `https://pocket.limitlesstcg.com/cards/${linkSet}/${number}`;
 	}
 
+	let searchInput: HTMLInputElement;
 	let search = $state('');
-	let searchTerms = $derived(search.split(',').map((search) => search.trim()));
-	let matchingCardArrays = $derived(
-		searchTerms.map((search) =>
-			cards.filter((card) => card.name.toLowerCase().includes(search.toLowerCase()))
-		)
-	);
-	let matchingCardIdArrays = $derived(
-		matchingCardArrays.map((cards) => cards.map((card) => card.id))
-	);
+	let matchingCards = $derived.by(() => {
+		if (search.length < 3) {
+			return [];
+		}
+		return cards.filter(
+			(card) => !selectedCards.has(card) && card.name.toLowerCase().includes(search.toLowerCase())
+		);
+	});
+
+	let selectedCards = new SvelteSet<Card>();
+
 	let matchingDecks = $derived(
 		decks.filter((deck) => {
 			const deckIds = deck.cards.map((card) => card.id);
-			return matchingCardIdArrays.every((ids) => deckIds.some((id) => ids.includes(id)));
+			return [...selectedCards].every((card) => deckIds.includes(card.id));
 		})
 	);
+
+	function handleCardAdd(card: Card) {
+		selectedCards.add(card);
+		search = '';
+		searchInput.focus();
+	}
+	function handleCardRemove(card: Card) {
+		selectedCards.delete(card);
+		searchInput.focus();
+	}
 </script>
 
 <svelte:head>
 	<title>Expert Battles</title>
 </svelte:head>
 
-<p>Search for cards, use commas between the cards to search for multiple</p>
-<input class="input" bind:value={search} />
+<input
+	id="search"
+	class="block input"
+	placeholder="Card name"
+	bind:value={search}
+	bind:this={searchInput}
+/>
+
+<br />
+
+<p>Matches (click to select):</p>
+{#if matchingCards.length > 0}
+	<div class="flex flex-wrap gap-2">
+		{#each matchingCards as card (card.id)}
+			<button type="button" onclick={() => handleCardAdd(card)}>
+				<Card {card} />
+			</button>
+		{/each}
+	</div>
+{/if}
+
+<br />
+
+<p>Selected (click to remove):</p>
+{#if selectedCards.size > 0}
+	<div class="flex flex-wrap gap-2">
+		{#each selectedCards as card (card.id)}
+			<button type="button" onclick={() => handleCardRemove(card)}>
+				<Card {card} />
+			</button>
+		{/each}
+	</div>
+{/if}
+
+<br />
 
 {#each matchingDecks as deck (deck)}
 	<div class="collapse collapse-arrow">
@@ -65,21 +106,7 @@
 		<div class="collapse-content flex flex-wrap gap-2">
 			{#each deck.cards as card (card.id)}
 				<a href={idToLink(card.id)} rel="external" target="_blank" class="link">
-					<figure class="flex flex-col justify-end gap-1 w-24 h-full">
-						<figcaption class="text-xs text-center">
-							{idsToNames[card.id]} <br /> ({card.id})
-						</figcaption>
-						<div class="relative">
-							{#await getImagePath(card.id)}
-								<p>{idsToNames[card.id]} ({card.id})</p>
-							{:then path}
-								<img src={path} alt={`${idsToNames[card.id]} (${card.id})`} loading="lazy" />
-							{/await}
-							<p class="right-0 bottom-0 z-10 absolute bg-black rounded-sm text-white text-2xl">
-								{card.count}
-							</p>
-						</div>
-					</figure>
+					<Card {card} count={card.count} />
 				</a>
 			{/each}
 		</div>
