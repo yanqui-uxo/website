@@ -1,0 +1,1 @@
+var e=``+new URL(`../assets/b2-203.DW78BHax.avif`,import.meta.url).href;export{e as default};
