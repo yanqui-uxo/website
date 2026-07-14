@@ -96,7 +96,14 @@
 		{/each}
 	</div>
 
-	<button type="button" class="btn" onclick={selectedCards.clear}>Clear all</button>
+	<button
+		type="button"
+		class="btn"
+		onclick={() => {
+			selectedCards.clear();
+			searchInput.focus();
+		}}>Clear all</button
+	>
 {/if}
 
 <br />
