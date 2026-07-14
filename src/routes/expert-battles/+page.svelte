@@ -31,7 +31,7 @@
 	let searchInput: HTMLInputElement;
 	let search = $state('');
 	let matchingCards = $derived.by(() => {
-		if (search.length < 3) {
+		if (search.length < 2) {
 			return [];
 		}
 		return cards.filter(
