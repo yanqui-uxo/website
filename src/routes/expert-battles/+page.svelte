@@ -71,10 +71,9 @@
 	bind:this={searchInput}
 />
 
-<br />
-
-<p>Matches (click to select):</p>
 {#if matchingCards.length > 0}
+	<br />
+	<p>Matches (click to select):</p>
 	<div class="flex flex-wrap gap-2">
 		{#each matchingCards as card (card.id)}
 			<button type="button" onclick={() => handleCardAdd(card)}>
@@ -84,10 +83,9 @@
 	</div>
 {/if}
 
-<br />
-
-<p>Selected (click to remove):</p>
 {#if selectedCards.size > 0}
+	<br />
+	<p>Selected (click to remove):</p>
 	<div class="flex flex-wrap gap-2">
 		{#each selectedCards as card (card.id)}
 			<button type="button" onclick={() => handleCardRemove(card)}>
