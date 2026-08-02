@@ -1,8 +1,7 @@
 import * as cheerio from 'cheerio';
 import type { Element } from 'domhandler';
 import { readFileSync, writeFileSync } from 'node:fs';
-import * as z from 'zod';
-import { branch } from './config.ts';
+import cardsJson from 'pokemon-tcg-pocket-database/dist/cards.min.json' with { type: 'json' };
 import fixedDecks from './fixed_decks.json' with { type: 'json' };
 import unknownDecksJson from './unknown_decks.json' with { type: 'json' };
 
@@ -39,7 +38,7 @@ function deckListTableToCards(table: cheerio.Cheerio<Element>) {
 			if (!altMatch || !altMatch[1] || !altMatch[2]) {
 				throw new Error(`Img alt regex failed on "${alt}"`);
 			}
-			const [setId, number] = [altMatch[1].replace('-', '').toLowerCase(), altMatch[2]];
+			const [setId, number] = [altMatch[1].replace('P', 'PROMO'), parseInt(altMatch[2])];
 			const id = `${setId}-${number}`;
 			cardIds.add(id);
 
@@ -85,47 +84,39 @@ const htmlDecks = $('table:contains("All Solo Battles")')
 		};
 	})
 	.toArray();
+
+const cards = cardsJson
+	.map((card) => ({
+		id: `${card.set}-${card.number}`,
+		name: card.name,
+		image: card.image
+	}))
+	.filter((card) => cardIds.has(card.id));
 const decks = htmlDecks.concat(unknownDecks);
 
-const cardsJsonResponse = await fetch(
-	`https://raw.githubusercontent.com/chase-mew/pokemon-tcg-pocket-cards/refs/heads/${branch}/v4.json`
-);
-const cardsJson = await cardsJsonResponse.json();
+const dupeIds: Record<string, string> = {};
+const dedupedCards: typeof cards = [];
 
-const Cards = z.array(
-	z.object({ id: z.string(), name: z.string(), rarity: z.string(), artist: z.string() })
-);
-const cards = Cards.parse(cardsJson).filter((c) => cardIds.has(c.id));
-
-const dupeExceptions = ['a4b-165'];
-const dupes = Object.fromEntries(
-	cards
-		.filter((card) => card.id.startsWith('a4b'))
-		.map((card) => [
-			card.id,
-			dupeExceptions.includes(card.id)
-				? undefined
-				: cards.find(
-						(otherCard) =>
-							!otherCard.id.startsWith('a4b') &&
-							card.name === otherCard.name &&
-							card.rarity === otherCard.rarity &&
-							card.artist === otherCard.artist
-					)
-		])
-);
-const dedupedCards = cards
-	.filter((card) => !dupes[card.id])
-	.map((card) => ({
-		id: card.id,
-		name: card.name
-	}));
+const seenImages: Record<string, string> = {};
+for (const card of cards) {
+	const imgId = seenImages[card.image];
+	if (imgId) {
+		dupeIds[card.id] = imgId;
+	} else {
+		dedupedCards.push(card);
+		seenImages[card.image] = card.id;
+	}
+}
 
 const dedupedDecks = decks.map((deck) => ({
 	...deck,
 	cards: deck.cards.map((card) => {
-		const dupe = dupes[card.id];
-		return dupe ? { id: dupe.id, count: card.count } : card;
+		const dupeId = dupeIds[card.id];
+		if (dupeId) {
+			return { ...card, id: dupeId };
+		} else {
+			return card;
+		}
 	})
 }));
 
