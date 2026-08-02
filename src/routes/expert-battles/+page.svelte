@@ -18,7 +18,7 @@
 	});
 
 	function idToLink(id: string): string {
-		const match = id.match(/(\w+)-(\d+)/);
+		const match = id.match(/(.+)-(\d+)/);
 		if (!match?.[1] || !match?.[2]) {
 			throw new Error(`Regex failed on ID ${id}`);
 		}
