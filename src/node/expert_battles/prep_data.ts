@@ -38,7 +38,7 @@ function deckListTableToCards(table: cheerio.Cheerio<Element>) {
 			if (!altMatch || !altMatch[1] || !altMatch[2]) {
 				throw new Error(`Img alt regex failed on "${alt}"`);
 			}
-			const [setId, number] = [altMatch[1].replace('P', 'PROMO'), parseInt(altMatch[2])];
+			const [setId, number] = [altMatch[1].replace('P', 'PROMO'), altMatch[2].padStart(3, '0')];
 			const id = `${setId}-${number}`;
 			cardIds.add(id);
 
@@ -87,7 +87,7 @@ const htmlDecks = $('table:contains("All Solo Battles")')
 
 const cards = cardsJson
 	.map((card) => ({
-		id: `${card.set}-${card.number}`,
+		id: `${card.set}-${card.number.toString().padStart(3, '0')}`,
 		name: card.name,
 		image: card.image
 	}))

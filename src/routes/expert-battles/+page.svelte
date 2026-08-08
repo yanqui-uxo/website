@@ -23,7 +23,7 @@
 			throw new Error(`Regex failed on ID ${id}`);
 		}
 
-		const [set, number] = [match[1], match[2]];
+		const [set, number] = [match[1], parseInt(match[2])];
 		const linkSet = set.replace('PROMO', 'P');
 		return `https://pocket.limitlesstcg.com/cards/${linkSet}/${number}`;
 	}
