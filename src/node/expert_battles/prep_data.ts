@@ -108,6 +108,8 @@ for (const card of cards) {
 	}
 }
 
+const dedupedCardsWithoutImages = dedupedCards.map((card) => ({ id: card.id, name: card.name }));
+
 const dedupedDecks = decks.map((deck) => ({
 	...deck,
 	cards: deck.cards.map((card) => {
@@ -121,4 +123,5 @@ const dedupedDecks = decks.map((deck) => ({
 }));
 
 writeFileSync('../../routes/expert-battles/decks.json', JSON.stringify(dedupedDecks));
-writeFileSync('../../routes/expert-battles/cards.json', JSON.stringify(dedupedCards));
+writeFileSync('cards_with_images.json', JSON.stringify(dedupedCards));
+writeFileSync('../../routes/expert-battles/cards.json', JSON.stringify(dedupedCardsWithoutImages));

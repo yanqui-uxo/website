@@ -1,6 +1,6 @@
 import { existsSync } from 'node:fs';
 import sharp from 'sharp';
-import cards from '../../routes/expert-battles/cards.json' with { type: 'json' };
+import cards from './cards_with_images.json' with { type: 'json' };
 
 const imagesDir = 'images';
 const overwrite = false;

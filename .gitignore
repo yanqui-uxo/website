@@ -22,5 +22,6 @@ Thumbs.db
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 
+/src/node/expert_battles/cards_with_images.json
 /src/node/expert_battles/expert_battles.html
 /src/node/expert_battles/images
